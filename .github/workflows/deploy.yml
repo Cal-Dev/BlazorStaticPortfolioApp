@@ -35,6 +35,10 @@ jobs:
       - name: Create .nojekyll file
         run: touch bin/Release/net8.0/publish/wwwroot/.nojekyll
 
+      # New step: Duplicate index.html as 404.html for proper SPA routing
+      - name: Duplicate index.html as 404.html
+        run: cp bin/Release/net8.0/publish/wwwroot/index.html bin/Release/net8.0/publish/wwwroot/404.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
