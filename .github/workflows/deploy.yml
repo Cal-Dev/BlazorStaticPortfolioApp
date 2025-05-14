@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Add this for deployment permissions
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,15 +25,17 @@ jobs:
       - name: Build
         run: dotnet build -c Release --no-restore
 
+      # Remove the output path from publish command
       - name: Publish
-        run: dotnet publish -c Release --no-build -o ./publish
+        run: dotnet publish -c Release --no-build
 
+      # Add step to create .nojekyll file
       - name: Create .nojekyll file
-        run: touch publish/wwwroot/.nojekyll
+        run: touch wwwroot/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: publish/wwwroot
+          folder: wwwroot # Changed from publish/wwwroot to wwwroot
           branch: gh-pages
           clean: true
